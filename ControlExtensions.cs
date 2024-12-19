@@ -46,5 +46,31 @@ namespace YourNameSpace
             foreach (var t in control.GetAllControls<T>())
                 t.Text = string.Empty;
         }
+        /// <summary>
+        /// 容器內所有特定控制項Text值綁定實體資料模型屬性值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="control"></param>
+        /// <param name="dataSource"></param>
+        public static void AllBindToText<T>(this Control control, object dataSource) where T : Control
+        {
+            foreach (var t in control.GetAllControls<T>())
+                t.BindToText(dataSource);
+        }
+        /// <summary>
+        /// Text值綁定實體資料模型屬性值(雙向),須設定控制項Tag與屬性名相同,且須先設定屬性變更通知功能(可參考SqlDatamodel.cs)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="control"></param>
+        /// <param name="dataSource"></param>
+        public static void BindToText<T>(this Control control, T dataSource)
+        {
+            string propertyName = control.Tag?.ToString();
+        
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                control.DataBindings.Add("Text", dataSource, propertyName, true, DataSourceUpdateMode.OnPropertyChanged);
+            }
+        }
     }
 }
