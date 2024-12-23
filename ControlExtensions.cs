@@ -13,17 +13,18 @@ namespace YourNameSpace
     public static class ControlExtensions
     {
         /// <summary>
-        /// 遞迴取得控制項內特定類型物件
+        /// 遞迴取得控制項內特定類型物件(客製擴充)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="control"></param>
+        /// <param name="excludeDerived"></param>
         /// <returns></returns>
-        public static IEnumerable<T> GetAllControls<T>(this Control control) where T : Control
+        public static IEnumerable<T> GetAllControls<T>(this Control control, bool excludeDerived = true) where T : Control
         {
             return control.GetAllControls()
-                          .OfType<T>();
+                          .OfType<T>()
+                          .Where(c => !excludeDerived || c.GetType() == typeof(T)); //  如果需要則排除繼承的控制項
         }
-
         /// <summary>
         /// 遞迴取得控制項內所有物件
         /// </summary>
